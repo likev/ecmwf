@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-import jquery from "jquery";
+import jquery from "jquery/src/jquery.js";
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import moment from 'moment';
 
@@ -18,7 +18,6 @@ let basehour = (currentHour >= 15 || currentHour <= 5) ? 8 : 20;
 let basetime = moment().hour(basehour).subtract(minusday, 'days');
 let validtime = basetime.clone().add(12, 'hours');
 
-$('#basetime').val('起始场 ' + basetime.format('YYYY-MM-DD HH') + ' 北京时');
 
 let productType = 'medium-uv-rh';
 let level = '500';
@@ -131,5 +130,21 @@ $('#select-products').on('change', function () {
     refresh();
 });
 
-$('#select-products').trigger('change');
 //refresh();
+
+function set_basetime(){
+    $('#basetime').val('起始场 ' + basetime.format('YYYY-MM-DD HH') + ' 北京时');
+    $('#select-products').trigger('change');
+}
+
+$('#prevtime').on('click', function(){
+    basetime.subtract(12, 'hours');
+    set_basetime();
+})
+
+$('#nexttime').on('click', function(){
+    basetime.add(12, 'hours');
+    set_basetime();
+})
+
+set_basetime();

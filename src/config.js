@@ -43,7 +43,7 @@ const CONFIG = {
         name: 'medium-visibility'
     },
     'opencharts_meteogram': {
-        levels: ['classical_10d', 'classical_15d', 'classical_plume', 'classical_15d_with_climate', 'classical_wave'],
+        levels: ['classical_15d_with_climate', 'classical_wave', 'classical_10d', 'classical_plume', 'classical_15d'],
         name: 'Luoyang',
         type: 'point-based'
     },
