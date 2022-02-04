@@ -51,9 +51,18 @@ async function getProduct() {
 }
 
 async function refresh() {
+    $('#chart-spinner').show();
+    //$('#result .chart').hide();
+
+    $('#result .chart').attr('src', '#');
     let link = await getProduct();
     $('#result .chart').attr('src', link);
 }
+
+$('#result .chart').on('load',function(){
+    $('#chart-spinner').hide();
+    //$('#result .chart').show();
+})
 
 function update_levels() {
     const levels = config[productType].levels;
