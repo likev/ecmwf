@@ -5,7 +5,7 @@ function fixedEncodeURIComponent(str) {
 }
 
 function getUTCTimeStr(time) {
-    return time.clone().subtract(8, 'hours').format('YYYY-MM-DDTHH')+'%3A00%3A00Z';
+    return time.clone().subtract(8, 'hours').format('YYYYMMDDHH')+'00';
 }
 
 export { fixedEncodeURIComponent, getUTCTimeStr };

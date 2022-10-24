@@ -23,31 +23,53 @@ let productType = 'medium-uv-rh';
 let level = '500';
 
 async function getProduct() {
-    //https://apps.ecmwf.int/webapps/opencharts-api/v1/products/medium-uv-rh/?valid_time=2022-01-31T03%3A00%3A00Z&base_time=2022-01-31T00%3A00%3A00Z&projection=opencharts_eastern_asia&level=1000
 
-    //const openchartsApi = 'https://apps.ecmwf.int/webapps/opencharts-api/v1/products';
-    const openchartsApi = 'https://ecmwf-apps.tianqitu.net/webapps/opencharts-api/v1/products';
+    //const openchartsApi = 'https://charts.ecmwf.int/opencharts-api/v1/export/';
+    const openchartsApi = 'https://ecmwf-apps.tianqitu.net/opencharts-api/v1/export/';
 
     //const cors_api = 'https://icors.vercel.app/';
 
     const productConfig = config[productType];
 
-    let fetch_url = `${openchartsApi}/${productType}/?valid_time=${getUTCTimeStr(validtime)}&base_time=${getUTCTimeStr(basetime)}&projection=opencharts_eastern_asia&level=${level}&layer_name=${level}${productConfig.name}`;
+    let fetch_body = {
+        "package": "opencharts",
+        "product": productType,
+        "format": "png",
+        "base_time": getUTCTimeStr(basetime),
+        "valid_time": getUTCTimeStr(validtime),
+        
+    };
 
-    if (productConfig.type && productConfig.type === 'point-based') {
-        fetch_url = `${openchartsApi}/${productType}/?base_time=${getUTCTimeStr(basetime)}&projection=opencharts_eastern_asia&epsgram=${level}&station_name=${productConfig.name}&lat=34.6836&lon=112.454`;
-    }else if(productConfig.type && productConfig.type ==='point-based-profile'){
-        fetch_url = `${openchartsApi}/${productType}/?valid_time=${getUTCTimeStr(validtime)}&base_time=${getUTCTimeStr(basetime)}&projection=opencharts_eastern_asia&station_name=${productConfig.name}&lat=34.6836&lon=112.454`;
+    if (productConfig.type) {
+
+        if (productConfig.type === 'point-based') {
+            fetch_body.epsgram = level;
+            fetch_body.station_name = productConfig.name;
+            fetch_body.lat = '34.6836';
+            fetch_body.lon = '112.454';
+        }else if(productConfig.type === 'point-based-profile'){
+            fetch_body.station_name = productConfig.name;
+            fetch_body.lat = '34.6836';
+            fetch_body.lon = '112.454';
+        }
+    }else{
+        fetch_body.level = level;
+        fetch_body.projection = "opencharts_eastern_asia";
     }
 
     //var ajax_api = `${cors_api}?${fixedEncodeURIComponent(fetch_url)}`;
 
-    let f = await fetch(fetch_url);
+    let f = await fetch(openchartsApi, {
+        "body": JSON.stringify(fetch_body),
+        "method": "POST",
+        "mode": "cors"
+    });
+
     let result = await f.json();
 
     console.log(result)
 
-    return result.data.link.href;
+    return result.url;
 }
 
 async function refresh() {
@@ -59,7 +81,7 @@ async function refresh() {
     $('#result .chart').attr('src', link);
 }
 
-$('#result .chart').on('load',function(){
+$('#result .chart').on('load', function () {
     $('#chart-spinner').hide();
     //$('#result .chart').show();
 })
@@ -132,7 +154,7 @@ $('#select-products').on('change', function () {
     const productConfig = config[productType];
     if (productConfig.type && productConfig.type === 'point-based') {
         $('#validdates').html('');
-    }else{
+    } else {
         update_validdates();
     }
 
@@ -141,17 +163,17 @@ $('#select-products').on('change', function () {
 
 //refresh();
 
-function set_basetime(){
+function set_basetime() {
     $('#basetime').val('起始场 ' + basetime.format('YYYY-MM-DD HH') + ' 北京时');
     $('#select-products').trigger('change');
 }
 
-$('#prevtime').on('click', function(){
+$('#prevtime').on('click', function () {
     basetime.subtract(12, 'hours');
     set_basetime();
 })
 
-$('#nexttime').on('click', function(){
+$('#nexttime').on('click', function () {
     basetime.add(12, 'hours');
     set_basetime();
 })
