@@ -44,11 +44,11 @@ async function getProduct() {
 
         if (productConfig.type === 'point-based') {
             fetch_body.epsgram = level;
-            //fetch_body.station_name = productConfig.name;
+            fetch_body.station_name = productConfig.name;
             fetch_body.lat = '34.6836';
             fetch_body.lon = '112.454';
         }else if(productConfig.type === 'point-based-profile'){
-            //fetch_body.station_name = productConfig.name;
+            fetch_body.station_name = productConfig.name;
             fetch_body.lat = '34.6836';
             fetch_body.lon = '112.454';
         }
