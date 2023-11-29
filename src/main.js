@@ -1,11 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-import jquery from "jquery/src/jquery.js";
+import { jQuery } from "../jquery/src/jquery.js";
+
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import moment from 'moment';
 
-window.$ = jquery;
+window.$ = jQuery;
 window.bootstrap = bootstrap;
 
 import config from './config';
