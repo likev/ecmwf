@@ -6,7 +6,7 @@ import "./selector.js";
 // import "./deferred.js";
 // import "./deferred/exceptionHook.js";
 // import "./core/ready.js";
-// import "./data.js";
+ import "./data.js";
 // import "./queue.js";
 // import "./queue/delay.js";
  import "./attributes.js";

@@ -12,6 +12,62 @@
 
     <style>
 
+        #result.chart-transform .chart-body, 
+        #result.chart-transform .chart-title, 
+        #result.chart-transform .chart-legend {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        #result.chart-transform .chart-title{
+            max-height: 140px;
+        }
+
+        #result.chart-transform .chart-body{
+            max-height: 1000px;
+            width: 1200px;
+        }
+
+        #result.chart-transform .chart-legend{
+            max-height: 200px;
+        }
+
+        #result.chart-transform .chart-title .chart {
+            margin-top: 0px;
+            margin-left: -130px;
+            width: 1200px;
+        }
+
+        #result.chart-transform .chart-body .chart {
+            width: 4000px;
+            transform: rotate(-8deg);
+            margin-top: -1300px;
+            margin-left: -1300px;
+        }
+
+        #result.chart-transform .chart-legend .chart {
+            margin-top: -720px;
+            margin-left: -180px;
+            width: 1200px;
+        }
+
+        #result.chart-point .chart-title .chart {
+            display: none;
+        }
+        #result.chart-point .chart-body .chart {
+            width: 100%;
+        }
+        #result.chart-point .chart-legend .chart {
+            display: none;
+        }
+
+        #models-form-check {
+            margin: 30px 0 50px 20px;
+        }
+
+        #models-form-check label {
+            margin-right: 50px;
+        }
     </style>
 
 </head>
@@ -40,8 +96,11 @@
 
                     <option value="medium-uv-rh">风场相对湿度</option>
                     <option value="medium-uv-z">风场位势高度</option>
+                    <option value="medium-t-z">温度场位势高度</option>
                     <option value="medium-wind-10wg">海平面气压10m阵风</option>
+                    <option value="medium-2t-wind">2m气温10m风</option>
 
+                    <option value="medium-mslp-rain">降水及海平面气压</option>
                     <option value="medium-rain-acc">累积降水</option>
                     <option value="medium-rain-rate">降水率</option>
                     <option value="medium-precipitation-type">降水类型</option>
@@ -66,6 +125,13 @@
                     <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
                 </div>
 
+                <div id="models-form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="modelSelect"> Default radio
+                    </label>
+                </div>
+                  
+
             </div>
 
             <div id=result class='col-8 right'>
@@ -86,7 +152,16 @@
                             </div>
                         </div>
                     </div>
-                    <img src="#" class="chart card-img-bottom" alt="">
+
+                    <div class="chart-title">
+                        <img src="#" class="chart" alt="">
+                    </div>
+                    <div class="chart-body">
+                        <img src="#" class="chart" alt="">
+                    </div>
+                    <div class="chart-legend">
+                        <img src="#" class="chart" alt="">
+                    </div>
                 </div>
             </div>
 

@@ -21,6 +21,7 @@ let validtime = basetime.clone().add(12, 'hours');
 
 
 let productType = 'medium-uv-rh';
+let productTypeName = 'medium-uv-rh';
 let level = '500';
 
 async function getProduct() {
@@ -34,7 +35,7 @@ async function getProduct() {
 
     let fetch_body = {
         "package": "opencharts",
-        "product": productType,
+        "product": productTypeName,
         "format": "png",
         "base_time": getUTCTimeStr(basetime),
         "valid_time": getUTCTimeStr(validtime),
@@ -52,6 +53,10 @@ async function getProduct() {
             fetch_body.station_name = productConfig.name;
             fetch_body.lat = '34.6836';
             fetch_body.lon = '112.454';
+        }else if(productConfig.type === 'single-level'){
+            fetch_body.projection = "opencharts_eastern_asia";
+
+            if(productConfig.interval) fetch_body.interval = productConfig.interval || 12;
         }
     }else{
         fetch_body.level = level;
@@ -148,6 +153,15 @@ $('#levels').on('click', 'a', function () {
     refresh();
 })
 
+$('#models-form-check').on('click', 'input', function(){
+    console.log(this.value);
+    productTypeName = this.value;
+
+    refresh();
+
+    //return false; //should not prevent default browser change
+})
+
 $('#select-products').on('change', function () {
     productType = $(this).val();
     update_levels();
@@ -157,6 +171,32 @@ $('#select-products').on('change', function () {
         $('#validdates').html('');
     } else {
         update_validdates();
+    }
+
+    //css
+    if (productConfig.type && 
+            (productConfig.type === 'point-based' || productConfig.type === 'point-based-profile') ) {
+
+        $('#result').removeClass('chart-transform').addClass('chart-point');
+        
+    } else {
+        $('#result').removeClass('chart-point').addClass('chart-transform');
+    }
+
+    $('#models-form-check').html('');
+    if (productConfig.models ) {
+        
+        let count = 0;
+        for (const name in productConfig.models) {
+            const val = productConfig.models[name];
+            $('#models-form-check').append(`<input class="form-check-input" type="radio" ${count===0 ? "checked" : ""} name="modelSelect" value='${val}' id="model${count}">
+        <label class="form-check-label" for="model${count}">${name}</label>`);
+
+            if(count===0) productTypeName = val;
+            count++;
+        }
+    }else{
+        productTypeName = productType;
     }
 
     refresh();
