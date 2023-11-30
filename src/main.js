@@ -6,6 +6,10 @@ import { jQuery } from "../jquery/src/jquery.js";
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import moment from 'moment';
 
+import AirDatepicker from 'air-datepicker'
+import 'air-datepicker/air-datepicker.css'
+import localeZh from 'air-datepicker/locale/zh';
+
 window.$ = jQuery;
 window.bootstrap = bootstrap;
 
@@ -204,19 +208,42 @@ $('#select-products').on('change', function () {
 
 //refresh();
 
-function set_basetime() {
-    $('#basetime').val('起始场 ' + basetime.format('YYYY-MM-DD HH') + ' 北京时');
+function change_basetime() {
+
     $('#select-products').trigger('change');
 }
 
+//AirDatepicker only select date without time and format is done with basetime
+//we use basetime as center
+let dp = new AirDatepicker('#basetime', {
+    locale: localeZh,
+
+    toggleSelected:false,
+    onSelect({date}){
+        change_basetime();
+    },
+    dateFormat(date) {//dateFormat is before onSelect and there may be twice dateFormat when select
+        console.log(date);
+        basetime = moment(date).hour(basetime.hour());
+
+        return '起始场 ' + basetime.format('YYYY-MM-DD HH') + ' 北京时';
+    }
+})
+
+//
 $('#prevtime').on('click', function () {
     basetime.subtract(12, 'hours');
-    set_basetime();
+    dp.selectDate(basetime.toDate(), {silent:false})
+
+    //change_basetime();
 })
 
 $('#nexttime').on('click', function () {
     basetime.add(12, 'hours');
-    set_basetime();
+    dp.selectDate(basetime.toDate(), {silent:false})
+
+    //change_basetime();
 })
 
-set_basetime();
+//change_basetime();
+dp.selectDate(basetime.toDate(), {silent:false});
