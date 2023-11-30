@@ -20,7 +20,7 @@ const currentHour = moment().hour();
 let minusday = currentHour >= 15 ? 0 : 1;
 let basehour = (currentHour >= 15 || currentHour <= 5) ? 8 : 20;
 
-let basetime = moment().hour(basehour).subtract(minusday, 'days');
+let basetime = moment().startOf('day').hour(basehour).subtract(minusday, 'days');
 let validtime = basetime.clone().add(12, 'hours');
 
 
@@ -132,7 +132,7 @@ function update_validdates() {
     for (let span = 0; span <= 168; span += 12) {
         let date = basetime.clone().add(span, 'hours');
 
-        list.append(`<li class="page-item ${date.isSame(validtime) ? 'active' : ''}" aria-current="page">
+        list.append(`<li class="page-item ${date.isSame(validtime, 'hour') ? 'active' : ''}" aria-current="page">
             <a class="page-link" href="#" data-utc='${getUTCTimeStr(date)}'  data-local='${+date}'><span class="fs-4">${date.date()}</span><span class="fs-6">${date.format("HH")}</span></a>
           </li>`)
 
