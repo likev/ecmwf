@@ -96,10 +96,12 @@ $('#result .chart').on('load', function () {
     //$('#result .chart').show();
 })
 
-function update_levels() {
+function update_levels_dom() {
     const levels = config[productType].levels;
 
     const list = $('#levels');
+
+    //recreate dom
     list.html('');
 
     let contain = false;
@@ -119,7 +121,11 @@ function update_levels() {
     })
 
     if (!contain) {
-        list.find('a').eq(0).trigger('click');
+        const levelEl = list.find('a').eq(0);
+        
+        levelEl.addClass('active').attr('aria-current', 'true');
+
+        level = levelEl.data('level') + '';
     }
 }
 
@@ -152,7 +158,9 @@ $('#validdates').on('click', '.page-link', function () {
 
 $('#levels').on('click', 'a', function () {
     level = $(this).data('level') + '';
-    update_levels();
+    //update_levels_dom();
+    $('#levels a').removeClass('active').removeAttr('aria-current');
+    $(this).addClass('active').attr('aria-current', 'true');
 
     refresh();
 })
@@ -168,7 +176,7 @@ $('#models-form-check').on('click', 'input', function(){
 
 $('#select-products').on('change', function () {
     productType = $(this).val();
-    update_levels();
+    update_levels_dom();
 
     const productConfig = config[productType];
     if (productConfig.type && productConfig.type === 'point-based') {
