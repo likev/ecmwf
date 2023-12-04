@@ -131,15 +131,16 @@ function update_levels_dom() {
 
 function update_validdates() {
 
-
+    const MAX_FORCAST_PERIOD = 240; //240 hours
     const list = $('#validdates');
     list.html('');
 
-    for (let span = 0; span <= 168; span += 12) {
+    for (let span = 0; span <= MAX_FORCAST_PERIOD; span += 12) {
         let date = basetime.clone().add(span, 'hours');
+        const hour = date.hour();
 
         list.append(`<li class="page-item ${date.isSame(validtime, 'hour') ? 'active' : ''}" aria-current="page">
-            <a class="page-link" href="#" data-utc='${getUTCTimeStr(date)}'  data-local='${+date}'><span class="fs-4">${date.date()}</span><span class="fs-6">${date.format("HH")}</span></a>
+            <a class="page-link" href="#" data-utc='${getUTCTimeStr(date)}'  data-local='${+date}'><span class="fs-3">${hour === 8 ? date.date() : ''}</span><span class="fs-6">${date.format("HH")}</span></a>
           </li>`)
 
     }
