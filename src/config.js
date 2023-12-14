@@ -9,26 +9,29 @@ const CONFIG = {
     'medium-uv-z': {
         levels: [1000, 925, 850, 700, 500, 300, 250, 200],
         models: {
-            'Google graphcast': 'graphcast_medium-uv-z',
+            'Graphcast': 'graphcast_medium-uv-z',
             'EC HRES': 'medium-uv-z',
-            'EC AIFS': 'aifs_medium-uv-z'
+            'EC AIFS': 'aifs_medium-uv-z',
+            'FuXi': 'fuxi_medium-uv-z'
         }
     },
     'medium-t-z':{
         levels: [1000, 925, 850, 700, 500, 300, 250, 200],
         models: {
-            'Google graphcast': 'graphcast_medium-t-z',
+            'Graphcast': 'graphcast_medium-t-z',
             'EC HRES': 'medium-t-z',
-            'EC AIFS': 'aifs_medium-t-z'
+            'EC AIFS': 'aifs_medium-t-z',
+            'FuXi': 'fuxi_medium-t-z'
         }
     },
     'medium-2t-wind':{
         type: 'single-level',
         levels: [1000],
         models: {
-            'Google graphcast': 'graphcast_medium-2t-wind',
+            'Graphcast': 'graphcast_medium-2t-wind',
             'EC HRES':'medium-2t-wind',
-            'EC AIFS': 'aifs_medium-2t-wind'
+            'EC AIFS': 'aifs_medium-2t-wind',
+            'FuXi': 'fuxi_medium-2t-wind'
         }
     },
     'medium-divergence': {
@@ -77,8 +80,9 @@ const CONFIG = {
         type: 'single-level',
         levels: [1000],
         models: {
-            'Google graphcast': 'graphcast_medium-rain-acc',
+            'Graphcast': 'graphcast_medium-rain-acc',
             'EC HRES':'medium-rain-acc',
+            'FuXi': 'fuxi_medium-rain-acc'
         }
     },
     'medium-rain-rate': {
@@ -103,8 +107,9 @@ const CONFIG = {
         type: 'single-level',
         levels: [1000],
         models: {
-            'Google graphcast': 'graphcast_medium-mslp-rain',
+            'Graphcast': 'graphcast_medium-mslp-rain',
             'EC HRES':'medium-mslp-rain',
+            'FuXi': 'fuxi_medium-mslp-rain'
         },
         interval: 12
     }
