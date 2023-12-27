@@ -219,12 +219,7 @@ $('#select-products').on('change', function () {
 
 function change_basetime() {
 
-    const productConfig = config[productType];
-    if (productConfig.type && productConfig.type === 'point-based') {
-        //don't need update_validdates
-    } else {
-        update_validdates();
-    }
+    update_validdates();
 
     refresh();
 }
