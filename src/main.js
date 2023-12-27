@@ -181,9 +181,9 @@ $('#select-products').on('change', function () {
 
     const productConfig = config[productType];
     if (productConfig.type && productConfig.type === 'point-based') {
-        $('#validdates').html('');
+        $('#validdates').hide();
     } else {
-        update_validdates();
+        $('#validdates').show();
     }
 
     //css
