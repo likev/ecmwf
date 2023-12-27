@@ -262,4 +262,5 @@ $('#nexttime').on('click', function () {
 })
 
 //change_basetime();
-dp.selectDate(basetime.toDate(), {silent:false});
+dp.selectDate(basetime.toDate(), {silent:true});
+$('#select-products').trigger('change');
