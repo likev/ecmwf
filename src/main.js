@@ -219,7 +219,14 @@ $('#select-products').on('change', function () {
 
 function change_basetime() {
 
-    $('#select-products').trigger('change');
+    const productConfig = config[productType];
+    if (productConfig.type && productConfig.type === 'point-based') {
+        //don't need update_validdates
+    } else {
+        update_validdates();
+    }
+
+    refresh();
 }
 
 //AirDatepicker only select date without time and format is done with basetime
