@@ -28,12 +28,13 @@ let productType = 'medium-uv-rh';
 let productTypeName = 'medium-uv-rh';
 let level = '500';
 
+
+//const openchartsApi = 'https://charts.ecmwf.int/opencharts-api/v1/';
+const openchartsApi = 'https://ecmwf-apps.tianqitu.net/opencharts-api/v1/';
+
+//const cors_api = 'https://icors.vercel.app/';
+
 async function getProduct() {
-
-    //const openchartsApi = 'https://charts.ecmwf.int/opencharts-api/v1/export/';
-    const openchartsApi = 'https://ecmwf-apps.tianqitu.net/opencharts-api/v1/export/';
-
-    //const cors_api = 'https://icors.vercel.app/';
 
     const productConfig = config[productType];
 
@@ -43,7 +44,7 @@ async function getProduct() {
         "format": "png",
         "base_time": getUTCTimeStr(basetime),
         "valid_time": getUTCTimeStr(validtime),
-        
+
     };
 
     if (productConfig.type) {
@@ -53,27 +54,29 @@ async function getProduct() {
             fetch_body.station_name = productConfig.name;
             fetch_body.lat = '34.6836';
             fetch_body.lon = '112.454';
-        }else if(productConfig.type === 'point-based-profile'){
+        } else if (productConfig.type === 'point-based-profile') {
             fetch_body.station_name = productConfig.name;
             fetch_body.lat = '34.6836';
             fetch_body.lon = '112.454';
-        }else if(productConfig.type === 'single-level'){
+        } else if (productConfig.type === 'single-level') {
             fetch_body.projection = "opencharts_eastern_asia";
 
-            if(productConfig.interval) fetch_body.interval = productConfig.interval || 12;
+            if (productConfig.interval) fetch_body.interval = productConfig.interval || 12;
         }
-    }else{
+    } else {
         fetch_body.level = level;
         fetch_body.projection = "opencharts_eastern_asia";
     }
 
     //var ajax_api = `${cors_api}?${fixedEncodeURIComponent(fetch_url)}`;
 
-    let f = await fetch(openchartsApi, {
+    let f = await fetch(openchartsApi + 'export/', {
         "body": JSON.stringify(fetch_body),
         "method": "POST",
         "mode": "cors"
     });
+
+    if (!f.ok) return false;
 
     let result = await f.json();
 
@@ -82,12 +85,80 @@ async function getProduct() {
     return result.url;
 }
 
+async function getProduct2() {
+
+    //https://charts.ecmwf.int/opencharts-api/v1/packages/opencharts/products/graphcast_medium-mslp-rain/axis/valid_time/?base_time=202402191200&projection=opencharts_eastern_asia&interval=12&values=202402240600
+
+    const productConfig = config[productType];
+
+    let fetch_info = {
+        "package": "opencharts",
+        "product": productTypeName,
+        "format": "png",
+        "base_time": getUTCTimeStr(basetime),
+        "valid_time": getUTCTimeStr(validtime),
+        "station_name": productConfig.name,
+        "interval": productConfig.interval || 12
+    };
+
+    let fetch_query = `${openchartsApi}packages/opencharts/products/${productTypeName}/axis/`;
+    let timeID = fetch_info.valid_time;
+
+    if (productConfig.type) {
+        //https://charts.ecmwf.int/opencharts-api/v1/packages/opencharts/products/opencharts_meteogram/axis/base_time/?epsgram=classical_10d&lat=34.6836&lon=112.454&station_name=Luoyang&values=202402191200
+        if (productConfig.type === 'point-based') {
+            timeID = fetch_info.base_time;
+            fetch_query += `base_time/?epsgram=${level}&lat=34.6836&lon=112.454&station_name=${fetch_info.station_name}&values=${timeID}`;
+        } else if (productConfig.type === 'point-based-profile') {
+            timeID = fetch_info.base_time;
+            fetch_query += `base_time/?lat=34.6836&lon=112.454&station_name=${fetch_info.station_name}&values=${timeID}`;
+        } else if (productConfig.type === 'single-level') {
+            //https://charts.ecmwf.int/opencharts-api/v1/packages/opencharts/products/graphcast_medium-mslp-rain/axis/valid_time/?base_time=202402191200&projection=opencharts_eastern_asia&interval=12&values=202402240600
+            fetch_query += `valid_time/?base_time=${fetch_info.base_time}&projection=opencharts_eastern_asia&values=${timeID}`;
+
+            if (productConfig.interval) fetch_query += `&interval=${fetch_info.interval}`;
+        }
+    } else {
+        fetch_query += `valid_time/?base_time=${fetch_info.base_time}&projection=opencharts_eastern_asia&values=${timeID}&level=${level}`;
+    }
+
+    //var ajax_api = `${cors_api}?${fixedEncodeURIComponent(fetch_url)}`;
+
+    let f = await fetch(fetch_query, {
+        "method": "GET",
+        "mode": "cors"
+    });
+
+    if (!f.ok) return false;
+
+    let response = await f.json();
+
+    console.log(response)
+
+    return response.results[timeID].url;
+}
+
 async function refresh() {
     $('#chart-spinner').show();
     //$('#result .chart').hide();
 
     $('#result .chart').attr('src', '#');
+
     let link = await getProduct();
+    if (link === false){
+        link = await getProduct2();
+
+        $('#result.chart-transform .chart-title').hide();
+        $('#result.chart-transform .chart-legend').hide();
+
+        $('#result.chart-transform .chart-body .chart').css('margin-top', '-900px')
+    }else{
+        $('#result.chart-transform .chart-title').show();
+        $('#result.chart-transform .chart-legend').show();
+
+        $('#result.chart-transform .chart-body .chart').css('margin-top', '-1300px')
+    }
+
     $('#result .chart').attr('src', link);
 }
 
@@ -122,7 +193,7 @@ function update_levels_dom() {
 
     if (!contain) {
         const levelEl = list.find('a').eq(0);
-        
+
         levelEl.addClass('active').attr('aria-current', 'true');
 
         level = levelEl.data('level') + '';
@@ -166,7 +237,7 @@ $('#levels').on('click', 'a', function () {
     refresh();
 })
 
-$('#models-form-check').on('click', 'input', function(){
+$('#models-form-check').on('click', 'input', function () {
     console.log(this.value);
     productTypeName = this.value;
 
@@ -187,28 +258,28 @@ $('#select-products').on('change', function () {
     }
 
     //css
-    if (productConfig.type && 
-            (productConfig.type === 'point-based' || productConfig.type === 'point-based-profile') ) {
+    if (productConfig.type &&
+        (productConfig.type === 'point-based' || productConfig.type === 'point-based-profile')) {
 
         $('#result').removeClass('chart-transform').addClass('chart-point');
-        
+
     } else {
         $('#result').removeClass('chart-point').addClass('chart-transform');
     }
 
     $('#models-form-check').html('');
-    if (productConfig.models ) {
-        
+    if (productConfig.models) {
+
         let count = 0;
         for (const name in productConfig.models) {
             const val = productConfig.models[name];
-            $('#models-form-check').append(`<input class="form-check-input" type="radio" ${count===0 ? "checked" : ""} name="modelSelect" value='${val}' id="model${count}">
+            $('#models-form-check').append(`<input class="form-check-input" type="radio" ${count === 0 ? "checked" : ""} name="modelSelect" value='${val}' id="model${count}">
         <label class="form-check-label" for="model${count}">${name}</label>`);
 
-            if(count===0) productTypeName = val;
+            if (count === 0) productTypeName = val;
             count++;
         }
-    }else{
+    } else {
         productTypeName = productType;
     }
 
@@ -229,8 +300,8 @@ function change_basetime() {
 let dp = new AirDatepicker('#basetime', {
     locale: localeZh,
 
-    toggleSelected:false,
-    onSelect({date}){
+    toggleSelected: false,
+    onSelect({ date }) {
         change_basetime();
     },
     dateFormat(date) {//dateFormat is before onSelect and there may be twice dateFormat when select
@@ -244,18 +315,18 @@ let dp = new AirDatepicker('#basetime', {
 //
 $('#prevtime').on('click', function () {
     basetime.subtract(12, 'hours');
-    dp.selectDate(basetime.toDate(), {silent:false})
+    dp.selectDate(basetime.toDate(), { silent: false })
 
     //change_basetime();
 })
 
 $('#nexttime').on('click', function () {
     basetime.add(12, 'hours');
-    dp.selectDate(basetime.toDate(), {silent:false})
+    dp.selectDate(basetime.toDate(), { silent: false })
 
     //change_basetime();
 })
 
 //change_basetime();
-dp.selectDate(basetime.toDate(), {silent:true});
+dp.selectDate(basetime.toDate(), { silent: true });
 $('#select-products').trigger('change');
