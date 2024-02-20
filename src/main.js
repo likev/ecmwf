@@ -109,9 +109,10 @@ async function getProduct2() {
         if (productConfig.type === 'point-based') {
             timeID = fetch_info.base_time;
             fetch_query += `base_time/?epsgram=${level}&lat=34.6836&lon=112.454&station_name=${fetch_info.station_name}&values=${timeID}`;
+
         } else if (productConfig.type === 'point-based-profile') {
-            timeID = fetch_info.base_time;
-            fetch_query += `base_time/?lat=34.6836&lon=112.454&station_name=${fetch_info.station_name}&values=${timeID}`;
+            fetch_query += `valid_time/?base_time=${fetch_info.base_time}&lat=34.6836&lon=112.454&station_name=${fetch_info.station_name}&values=${timeID}`;
+
         } else if (productConfig.type === 'single-level') {
             //https://charts.ecmwf.int/opencharts-api/v1/packages/opencharts/products/graphcast_medium-mslp-rain/axis/valid_time/?base_time=202402191200&projection=opencharts_eastern_asia&interval=12&values=202402240600
             fetch_query += `valid_time/?base_time=${fetch_info.base_time}&projection=opencharts_eastern_asia&values=${timeID}`;
@@ -145,14 +146,14 @@ async function refresh() {
     $('#result .chart').attr('src', '#');
 
     let link = await getProduct();
-    if (link === false){
+    if (link === false) {
         link = await getProduct2();
 
         $('#result.chart-transform .chart-title').hide();
         $('#result.chart-transform .chart-legend').hide();
 
         $('#result.chart-transform .chart-body .chart').css('margin-top', '-900px')
-    }else{
+    } else {
         $('#result.chart-transform .chart-title').show();
         $('#result.chart-transform .chart-legend').show();
 
@@ -261,7 +262,11 @@ $('#select-products').on('change', function () {
     if (productConfig.type &&
         (productConfig.type === 'point-based' || productConfig.type === 'point-based-profile')) {
 
-        $('#result').removeClass('chart-transform').addClass('chart-point');
+        $('#result')
+            .removeClass('chart-transform')
+            .addClass('chart-point')
+            .find('.chart-body .chart')
+            .css('margin-top', '')//remove
 
     } else {
         $('#result').removeClass('chart-point').addClass('chart-transform');
