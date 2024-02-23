@@ -15,6 +15,7 @@ window.bootstrap = bootstrap;
 
 import config from './config';
 import { fixedEncodeURIComponent, getUTCTimeStr } from "./utils"
+import { addColorBar } from "./colorbar.js"
 
 const currentHour = moment().hour();
 let minusday = currentHour >= 15 ? 0 : 1;
@@ -136,7 +137,13 @@ async function getProduct2() {
 
     console.log(response)
 
-    return response.results[timeID].url;
+    const { error, url, legend } = response.results[timeID];
+
+    if (error) {
+        console.log({ error });
+    }
+
+    return { error, url, legend };
 }
 
 async function refresh() {
@@ -147,20 +154,45 @@ async function refresh() {
 
     let link = await getProduct();
     if (link === false) {
-        link = await getProduct2();
 
         $('#result.chart-transform .chart-title').hide();
-        $('#result.chart-transform .chart-legend').hide();
+        $('#result.chart-transform .chart-legend .chart').hide();
 
-        $('#result.chart-transform .chart-body .chart').css('margin-top', '-900px')
+        $('#result.chart-transform .chart-body .chart').css('margin-top', '-900px');
+
+        let colorbar = $('#result.chart-transform .chart-legend .colorbar');
+        colorbar.hide();
+
+        const { error, url, legend } = await getProduct2();
+        if (error) {
+            $('#chart-spinner').hide(); //error like "no current product"
+            return;
+        }
+
+        link = url;
+
+        if (Array.isArray(legend)) {
+            const color_legend = legend.find((element) => element.data.type === "colorbar");
+
+            if(color_legend){
+                addColorBar(colorbar, color_legend.data)
+
+                colorbar.show();
+            }
+        }
+
+
     } else {
         $('#result.chart-transform .chart-title').show();
-        $('#result.chart-transform .chart-legend').show();
+
+        $('#result.chart-transform .chart-legend .colorbar').hide();
+        $('#result.chart-transform .chart-legend .chart').show();
 
         $('#result.chart-transform .chart-body .chart').css('margin-top', '-1300px')
     }
 
     $('#result .chart').attr('src', link);
+
 }
 
 $('#result .chart').on('load', function () {
