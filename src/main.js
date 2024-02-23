@@ -155,12 +155,12 @@ async function refresh() {
     let link = await getProduct();
     if (link === false) {
 
-        $('#result.chart-transform .chart-title').hide();
-        $('#result.chart-transform .chart-legend .chart').hide();
+        $('#result .chart-title').hide();
+        $('#result .chart-legend .chart').hide();
 
         $('#result.chart-transform .chart-body .chart').css('margin-top', '-900px');
 
-        let colorbar = $('#result.chart-transform .chart-legend .colorbar');
+        let colorbar = $('#result .chart-legend .colorbar');
         colorbar.hide();
 
         const { error, url, legend } = await getProduct2();
