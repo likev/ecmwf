@@ -104,7 +104,9 @@ function addColorBar(div, data) {
         const label = $('<div>').addClass('colorbar-label').text(entry['min-range']);
 
         const rightmost = $('<div>').css('float','right').text(entry['max-range']);
-        if(index === data.number - 1) label.append(rightmost);
+
+        //we don't show rightmost if there are more than 10 label because label width will too small
+        if(index === data.number - 1 && index < 10) label.append(rightmost);
 
         labelsContainer.append(label)
     });
