@@ -82,6 +82,7 @@ const CONFIG = {
         models: {
             'Graphcast': 'graphcast_medium-rain-acc',
             'EC HRES':'medium-rain-acc',
+            'EC AIFS': 'aifs_medium-rain-acc',
             'FuXi': 'fuxi_medium-rain-acc'
         }
     },
@@ -109,6 +110,7 @@ const CONFIG = {
         models: {
             'Graphcast': 'graphcast_medium-mslp-rain',
             'EC HRES':'medium-mslp-rain',
+            'EC AIFS': 'aifs_medium-mslp-rain',
             'FuXi': 'fuxi_medium-mslp-rain'
         },
         interval: 12
