@@ -119,6 +119,18 @@ const CONFIG = {
             'FuXi': 'fuxi_medium-mslp-rain'
         },
         interval: 12
+    },
+    'aifs_medium-mean-spread': {
+        type: 'single-level',
+        levels: [1000],
+        models: {
+            'AIFS-T2m': 'aifs_medium-2t-mean-spread',
+            'AIFS-MSLP': 'aifs_medium-mslp-mean-spread',
+            'AIFS-T850': 'aifs_medium-t850-mean-spread',
+            'AIFS-T500': 'aifs_medium-t500-mean-spread',
+            'AIFS-Z500': 'aifs_medium-z500-mean-spread',
+            'AIFS-Z300': 'aifs_medium-z300-mean-spread',
+        }
     }
 };
 
