@@ -10,18 +10,20 @@ const CONFIG = {
         levels: [1000, 925, 850, 700, 500, 300, 250, 200],
         models: {
             'Graphcast': 'graphcast_medium-uv-z',
+            'Aurora': 'aurora_medium-uv-z',
             'EC HRES': 'medium-uv-z',
-            'EC AIFS': 'aifs_medium-uv-z',
-            'FuXi': 'fuxi_medium-uv-z'
+            'EC AIFS': 'aifs_single_medium-uv-z',
+            'AIFS_CF': 'aifs_ens_cf_medium-uv-z'
         }
     },
     'medium-t-z':{
         levels: [1000, 925, 850, 700, 500, 300, 250, 200],
         models: {
             'Graphcast': 'graphcast_medium-t-z',
+            'Aurora': 'aurora_medium-t-z',
             'EC HRES': 'medium-t-z',
-            'EC AIFS': 'aifs_medium-t-z',
-            'FuXi': 'fuxi_medium-t-z'
+            'EC AIFS': 'aifs_single_medium-t-z',
+            'AIFS_CF': 'aifs_ens_cf_medium-t-z'
         }
     },
     'medium-2t-wind':{
@@ -29,9 +31,10 @@ const CONFIG = {
         levels: [1000],
         models: {
             'Graphcast': 'graphcast_medium-2t-wind',
+            'Aurora': 'aurora_medium-2t-wind',
             'EC HRES':'medium-2t-wind',
-            'EC AIFS': 'aifs_medium-2t-wind',
-            'FuXi': 'fuxi_medium-2t-wind'
+            'EC AIFS': 'aifs_single_medium-2t-wind',
+            'AIFS_CF': 'aifs_ens_cf_medium-2t-wind'
         }
     },
     'medium-divergence': {
@@ -82,8 +85,8 @@ const CONFIG = {
         models: {
             'Graphcast': 'graphcast_medium-rain-acc',
             'EC HRES':'medium-rain-acc',
-            'EC AIFS': 'aifs_medium-rain-acc',
-            'FuXi': 'fuxi_medium-rain-acc'
+            'EC AIFS': 'aifs_single_medium-rain-acc',
+            'AIFS_CF': 'aifs_ens_cf_medium-rain-acc'
         }
     },
     'medium-rain-rate': {
@@ -115,21 +118,21 @@ const CONFIG = {
         models: {
             'Graphcast': 'graphcast_medium-mslp-rain',
             'EC HRES':'medium-mslp-rain',
-            'EC AIFS': 'aifs_medium-mslp-rain',
-            'FuXi': 'fuxi_medium-mslp-rain'
+            'EC AIFS': 'aifs_single_medium-mslp-rain',
+            'AIFS_CF': 'aifs_ens_cf_medium-mslp-rain'
         },
         interval: 12
     },
-    'aifs_medium-mean-spread': {
+    'aifs_single_medium-mean-spread': {
         type: 'single-level',
         levels: [1000],
         models: {
-            'AIFS-T2m': 'aifs_medium-2t-mean-spread',
-            'AIFS-MSLP': 'aifs_medium-mslp-mean-spread',
-            'AIFS-T850': 'aifs_medium-t850-mean-spread',
-            'AIFS-T500': 'aifs_medium-t500-mean-spread',
-            'AIFS-Z500': 'aifs_medium-z500-mean-spread',
-            'AIFS-Z300': 'aifs_medium-z300-mean-spread',
+            'AIFS-T2m': 'aifs_single_medium-2t-mean-spread',
+            'AIFS-MSLP': 'aifs_single_medium-mslp-mean-spread',
+            'AIFS-T850': 'aifs_single_medium-t850-mean-spread',
+            'AIFS-T500': 'aifs_single_medium-t500-mean-spread',
+            'AIFS-Z500': 'aifs_single_medium-z500-mean-spread',
+            'AIFS-Z300': 'aifs_single_medium-z300-mean-spread',
         }
     }
 };
