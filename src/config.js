@@ -99,8 +99,8 @@ const CONFIG = {
         name: 'Luoyang',
         type: 'point-based'
     },
-    'aifs_opencharts_meteogram': {
-        levels: ['aifs_classical_10d', 'aifs_classical_plume'],
+    'aifs_ens_opencharts_meteogram': {
+        levels: ['aifs_ens_classical_10d', 'aifs_ens_classical_plume'],
         name: 'Luoyang',
         type: 'point-based'
     },
